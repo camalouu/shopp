@@ -1,6 +1,7 @@
-const data = require("../data.json")
+// const data = require("../data.json")
+import data from '../data.json'
 
-module.exports.handler = async event => {
+export const handler = async event => {
   return {
     statusCode: 200,
     headers: {

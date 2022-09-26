@@ -1,6 +1,6 @@
-const data = require("../data.json")
+import data from '../data.json'
 
-module.exports.handler = async event => {
+export const handler = async event => {
   const productId = event.pathParameters?.productId
   if (productId) {
     const product = data.find(p => p.id === productId)
