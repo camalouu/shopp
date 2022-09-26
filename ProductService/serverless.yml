@@ -6,6 +6,13 @@ provider:
   region: eu-north-1
   stage: dev
 
+plugins:
+  - serverless-esbuild
+
+custom:
+  esbuild:
+    config: './config.js'
+
 functions:
   getProductsList:
     handler: getProductsList/handler.handler

@@ -1,1 +1,8 @@
-{}
+{
+  "scripts": {
+    "deploy": "serverless deploy"
+  },
+  "devDependencies": {
+    "serverless-esbuild": "^1.33.0"
+  }
+}
