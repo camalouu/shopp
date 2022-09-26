@@ -8,10 +8,14 @@ provider:
 
 plugins:
   - serverless-esbuild
+  - serverless-auto-swagger
 
 custom:
   esbuild:
-    config: './config.js'
+    config: './esbuild.config.js'
+  autoswagger:
+    basePath: '/dev'
+    host: 'm3a8z91udj.execute-api.eu-north-1.amazonaws.com'
 
 functions:
   getProductsList:
