@@ -12,27 +12,21 @@
     "price": 899
   },
   {
-    "id": "971ec4b8-1724-446f-bd42-2b83e031eebf",
-    "title": "Apple Macbook Air M2",
-    "description": "light, beautiful, powerfull machine for everyday use",
+    "id": "4146fce2-8c2e-4e0e-868e-c49cae6940d6",
+    "title": "Lenovo L340 gaming",
+    "description": "Good price for gaming laptop",
+    "price": 649
+  },
+  {
+    "id": "5fb6ddb7-ff38-4346-af51-69430924483a",
+    "title": "Apple Macbook Pro 14",
+    "description": "MacBook Pro with the incredibly powerful M1 Pro or M1 Max chip. Amazing battery life. And a brilliant Liquid Retina XDR display",
     "price": 1199
   },
   {
     "id": "971ec4b8-1724-446f-bd42-2b83e031eebf",
-    "title": "Apple Macbook Air M2",
-    "description": "light, beautiful, powerfull machine for everyday use",
-    "price": 1199
-  },
-  {
-    "id": "971ec4b8-1724-446f-bd42-2b83e031eebf",
-    "title": "Apple Macbook Air M2",
-    "description": "light, beautiful, powerfull machine for everyday use",
-    "price": 1199
-  },
-  {
-    "id": "971ec4b8-1724-446f-bd42-2b83e031eebf",
-    "title": "Apple Macbook Air M2",
-    "description": "light, beautiful, powerfull machine for everyday use",
+    "title": "Dell XPS 13",
+    "description": "Dell XPS 13 is a Windows 10 laptop with a 13.30-inch display that has a resolution of 3200x1800 pixels. It is powered by a Core i5 processor and it comes with 8GB of RAM. The Dell XPS 13 packs 128GB of SSD storage. Graphics are powered by Intel Integrated HD Graphics 520.",
     "price": 1199
   }
 ]
