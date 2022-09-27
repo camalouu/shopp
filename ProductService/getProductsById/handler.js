@@ -19,7 +19,7 @@ export const handler = async event => {
     if (product)
       return response(200, product)
     else
-      return response(400, { error: `Product with id ${productId} is not found` })
+      return response(404, { error: `Product with id ${productId} is not found` })
   }
   return response(400, { error: 'ProductId is not provided' })
 }
