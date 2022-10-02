@@ -27,7 +27,8 @@ foreach($elem in $data)
 
   $stock = @{
     product_id=@{S=$elem.id};
-    count=@{N=(Get-Random -Maximum 100).ToString()}
+    count=@{N=$elem.count.ToString()}
+    # count=@{N=(Get-Random -Maximum 100).ToString()}
   }
 
   putItemToDynamoDB "stocks" (ConvertTo-Json $stock).replace('"', '\"')
