@@ -1,0 +1,11 @@
+{
+  "scripts": {
+    "deploy": "serverless deploy",
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
+  },
+  "devDependencies": {
+    "jest": "^29.0.3",
+    "serverless-auto-swagger": "^2.8.2",
+    "serverless-esbuild": "^1.33.0"
+  }
+}
