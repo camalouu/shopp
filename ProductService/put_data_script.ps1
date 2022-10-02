@@ -1,8 +1,14 @@
-
-function putItemToDynamoDb
+function putItemToDynamoDB
 {
-  param($dynamoJSON)
-  aws dynamodb put-item --table-name products --item $dynamoJSON
+  param(
+    [Parameter(Mandatory=$true, Position=0)]
+    [string]$tableName,
+        
+    [Parameter(Mandatory=$true, Position=1)]
+    [string]$dynamoJSON
+  )
+
+  aws dynamodb put-item --table-name $tableName --item $dynamoJSON
   # Write-Host $dynamoJSON
 }
 
@@ -10,13 +16,19 @@ $data = Get-Content ./data.json | ConvertFrom-Json
 
 foreach($elem in $data)
 {
-  $dynamoItem = @{
+  $product = @{
     id=@{S=$elem.id};
     title=@{S=$elem.title};
     description=@{S=$elem.description};
     price=@{N=$elem.price.ToString()};
   } 
-  $item = ConvertTo-Json $dynamoItem 
-  $item = $item.replace('"', '\"')
-  putItemToDynamoDb($item)
+
+  putItemToDynamoDB "products" (ConvertTo-Json $product).replace('"', '\"')
+
+  $stock = @{
+    product_id=@{S=$elem.id};
+    count=@{N=(Get-Random -Maximum 100).ToString()}
+  }
+
+  putItemToDynamoDB "stocks" (ConvertTo-Json $stock).replace('"', '\"')
 }
