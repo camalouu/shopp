@@ -1,7 +1,12 @@
-// const data = require("../data.json")
-import data from '../data.json'
+import { DynamoDB } from 'aws-sdk'
+// import * as dotenv from 'dotenv'
+// dotenv.config()
+
+const db = new DynamoDB.DocumentClient()
 
 export const handler = async event => {
+  const data = await db.scan({ TableName: 'products' }).promise()
+
   return {
     statusCode: 200,
     headers: {

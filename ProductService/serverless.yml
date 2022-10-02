@@ -1,21 +1,65 @@
 service: product-service
 
+useDotenv: true
+
 provider: 
   name: aws
   runtime: nodejs16.x
   region: eu-north-1
   stage: dev
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:DescribeTable
+        - dynamodb:Query
+        - dynamodb:Scan
+        - dynamodb:GetItem
+        - dynamodb:PutItem
+        - dynamodb:UpdateItem
+        - dynamodb:DeleteItem
+      Resource: '*'
 
 plugins:
   - serverless-esbuild
-  - serverless-auto-swagger
+  # - serverless-auto-swagger
+
 
 custom:
   esbuild:
     config: './esbuild.config.js'
-  autoswagger:
-    basePath: '/dev'
-    host: 'm3a8z91udj.execute-api.eu-north-1.amazonaws.com'
+  # autoswagger:
+  #   basePath: '/dev'
+  #   host: 'm3a8z91udj.execute-api.eu-north-1.amazonaws.com'
+
+
+resources: # CloudFormation template syntax from here on.
+  Resources:
+    products:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: products
+        AttributeDefinitions:
+          - AttributeName: id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: id
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
+    stocks:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: stocks
+        AttributeDefinitions:
+          - AttributeName: product_id
+            AttributeType: S
+        KeySchema:
+          - AttributeName: product_id
+            KeyType: HASH 
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1
 
 functions:
   getProductsList:

@@ -7,5 +7,9 @@
     "jest": "^29.0.3",
     "serverless-auto-swagger": "^2.8.2",
     "serverless-esbuild": "^1.33.0"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1227.0",
+    "dotenv": "^16.0.3"
   }
 }
