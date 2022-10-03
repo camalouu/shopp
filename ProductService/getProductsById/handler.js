@@ -1,4 +1,9 @@
-import data from '../data.json'
+import { DynamoDB } from 'aws-sdk'
+// import * as dotenv from 'dotenv'
+// dotenv.config()
+
+const db = new DynamoDB.DocumentClient()
+
 
 const response = (statusCode, payload) => {
   return {
@@ -15,7 +20,15 @@ const response = (statusCode, payload) => {
 export const handler = async event => {
   const productId = event.pathParameters?.productId
   if (productId) {
-    const product = data.find(p => p.id === productId)
+
+    const productQuery = await db.query({
+      TableName: 'products',
+      KeyConditionExpression: 'id = :id',
+      ExpressionAttributeValues: { ':id': productId }
+    }).promise()
+
+    const product = productQuery.Items[0]
+    
     if (product)
       return response(200, product)
     else
