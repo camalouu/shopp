@@ -1,12 +1,12 @@
 import { DynamoDB } from 'aws-sdk'
 import { v4 as uuidv4 } from 'uuid';
-// dotenv.config()
+import { response } from '../helpers/response.js'
 
 const db = new DynamoDB.DocumentClient()
 
-
 export const handler = async event => {
   try {
+    console.log(event)
 
     const { count, ...productData } = JSON.parse(event.body)
 
@@ -19,18 +19,12 @@ export const handler = async event => {
 
     await db.put({
       TableName: 'stocks',
-      Item: { count , product_id: newProduct.id }
+      Item: { count, product_id: newProduct.id }
     }).promise()
 
-    return {
-      statusCode: 200,
-      body: JSON.stringify({message: 'items added', newProduct})
-    }
+    return response(200, { message: 'items added', newProduct })
 
   } catch (err) {
-    return {
-      statusCode: 500,
-      body: JSON.stringify({ error: err })
-    }
+    return response(500, { error: err })
   }
 }

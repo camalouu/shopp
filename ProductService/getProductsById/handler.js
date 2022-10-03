@@ -1,38 +1,32 @@
 import { DynamoDB } from 'aws-sdk'
-// import * as dotenv from 'dotenv'
-// dotenv.config()
+import { response } from '../helpers/response.js'
 
 const db = new DynamoDB.DocumentClient()
 
-
-const response = (statusCode, payload) => {
-  return {
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Access-Control-Allow-Credentials': true,
-      'Content-Type': 'application/json'
-    },
-    statusCode,
-    body: JSON.stringify(payload)
-  }
-}
-
 export const handler = async event => {
-  const productId = event.pathParameters?.productId
-  if (productId) {
+  try {
+    console.log(event)
+    const productId = event.pathParameters?.productId
+    if (productId) {
 
-    const productQuery = await db.query({
-      TableName: 'products',
-      KeyConditionExpression: 'id = :id',
-      ExpressionAttributeValues: { ':id': productId }
-    }).promise()
+      const productQuery = await db.query({
+        TableName: 'products',
+        KeyConditionExpression: 'id = :id',
+        ExpressionAttributeValues: { ':id': productId }
+      }).promise()
 
-    const product = productQuery.Items[0]
-    
-    if (product)
-      return response(200, product)
-    else
-      return response(404, { error: `Product with id ${productId} is not found` })
+      const stockQuery = await db.query({
+        TableName: 'stocks',
+        KeyConditionExpression: 'product_id = :id',
+        ExpressionAttributeValues: { ':id': productId }
+      }).promise()
+
+      const product = productQuery.Items[0]
+      const { count } = stockQuery.Items[0]
+
+      return response(200, { ...product, count })
+    }
+  } catch (err) {
+    return response(500, { error: 'error occured on executing lambda function' })
   }
-  return response(400, { error: 'ProductId is not provided' })
 }
