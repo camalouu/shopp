@@ -32,7 +32,7 @@ custom:
   #   host: 'm3a8z91udj.execute-api.eu-north-1.amazonaws.com'
 
 
-resources: # CloudFormation template syntax from here on.
+resources: 
   Resources:
     products:
       Type: AWS::DynamoDB::Table
