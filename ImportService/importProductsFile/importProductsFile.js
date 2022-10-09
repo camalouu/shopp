@@ -1,31 +1,32 @@
-import { S3 } from "aws-sdk"
-
+const { S3 } = require('aws-sdk')
 const response = (statusCode, payload) => {
-    return {
-        statusCode,
-        headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Content-Type': 'application/json',
-        },
-        body: payload
-    }
+  return {
+    statusCode,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Content-Type': 'application/json',
+    },
+    body: payload
+  }
 }
 
-const s3 = new S3({ region: 'eu-north-1' })
-const BUCKET = 'import-service-bucket-zafar'
 
-export const importProductsFile = async (event) => {
+module.exports.importProductsFile = async (event) => {
 
-    const name = event.queryStringParameters.name
+  const s3 = new S3({ region: 'eu-north-1' })
+  const BUCKET = 'import-service-bucket-zafar'
+  const { name } = event.queryStringParameters
 
-    const params = {
-        Bucket: BUCKET,
-        Key: `uploaded/${name}`,
-        Expires: 60,
-        ContentType: 'text/csv'
-    }
+  if (!name) return response(400, "bad request")
 
-    const signedUrl = await s3.getSignedUrlPromise('putObject', params)
+  const params = {
+    Bucket: BUCKET,
+    Key: `uploaded/${name}`,
+    Expires: 60,
+    ContentType: 'text/csv'
+  }
 
-    return response(200, signedUrl)
+  const signedUrl = await s3.getSignedUrlPromise('putObject', params)
+
+  return response(200, signedUrl)
 }
