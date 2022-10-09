@@ -22,7 +22,7 @@ custom:
 
 functions:
   importProductFiles:
-    handler: handler.importProductFiles
+    handler: handler.importProductsFile
     events: 
       - http:
           path: import
@@ -32,3 +32,12 @@ functions:
             parameters:
               querystrings:
                 name: true
+  importFileParser:
+    handler: handler.importFileParser
+    events:
+      - s3:
+          bucket: import-service-bucket-zafar
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: uploaded/
+          existing: true
