@@ -1,0 +1,13 @@
+{
+  "scripts": {
+    "deploy": "sls deploy"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.1231.0",
+    "csv-parser": "^3.0.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.15.10",
+    "serverless-esbuild": "^1.33.0"
+  }
+}
