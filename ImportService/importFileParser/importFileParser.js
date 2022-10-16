@@ -1,7 +1,8 @@
-import { S3 } from "aws-sdk"
+import { S3, SQS } from "aws-sdk"
 import csv from "csv-parser"
 
 const s3client = new S3({ region: 'eu-north-1' })
+const sqs = new SQS()
 const Bucket = 'import-service-bucket-zafar'
 
 export const importFileParser = async (event) => {
@@ -13,8 +14,12 @@ export const importFileParser = async (event) => {
       .getObject({ Bucket, Key })
       .createReadStream()
       .pipe(csv())
-      .on('data', console.log)
-      .on('error', console.error)
+      .on('data', data => {
+        sqs.sendMessage({
+          QueueUrl: 'someurl',
+          MessageBody: data
+        }, () => console.log('csv data sent: ', data))
+      })
 
     await s3client.copyObject({
       Bucket,

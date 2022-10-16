@@ -10,14 +10,19 @@ provider:
   iamRoleStatements:
     - Effect: Allow
       Action:
-        - dynamodb:DescribeTable
-        - dynamodb:Query
-        - dynamodb:Scan
-        - dynamodb:GetItem
-        - dynamodb:PutItem
-        - dynamodb:UpdateItem
-        - dynamodb:DeleteItem
+        - 'dynamodb:*'
       Resource: '*'
+    - Effect: Allow
+      Action:
+        - 'sns:*'
+      Resource: '*'
+    - Effect: Allow
+      Action:
+        - 'sqs:*'
+      Resource: '*'
+  environment:
+    SNS_ARN:
+      Ref: SNSTopic
 
 plugins:
   - serverless-esbuild
@@ -34,6 +39,21 @@ custom:
 
 resources: 
   Resources:
+    SQSQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: catalogItemsQueue
+    SNSTopic:
+      Type: AWS::SNS::Topic
+      Properties:
+        TopicName: createProductTopic
+    SNSSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: camalouu@gmail.com
+        Protocol: email
+        TopicArn:
+          Ref: SNSTopic
     products:
       Type: AWS::DynamoDB::Table
       Properties:
@@ -83,3 +103,12 @@ functions:
           path: products
           method: post
           cors: true
+  catalogBatchProcess:
+    handler: catalogBatchProcess/handler.handler
+    events:
+      - sqs:
+          batchSize: 5
+          arn:
+            Fn::GetAtt:
+              - SQSQueue
+              - Arn
