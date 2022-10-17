@@ -16,9 +16,13 @@ export const importFileParser = async (event) => {
       .pipe(csv())
       .on('data', data => {
         sqs.sendMessage({
-          QueueUrl: 'someurl',
-          MessageBody: data
-        }, () => console.log('csv data sent: ', data))
+          QueueUrl: 'https://sqs.eu-north-1.amazonaws.com/301382425986/catalogItemsQueue',
+          MessageBody: JSON.stringify(data)
+        }, (err, sendData) => {
+          console.log('csv data: ', JSON.stringify(data))
+          console.log('err: ', err)
+          console.log('sendData: ', sendData)
+        })
       })
 
     await s3client.copyObject({
