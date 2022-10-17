@@ -6,7 +6,7 @@ import { productSchema } from '../helpers/productSchema.js';
 const db = new DynamoDB.DocumentClient()
 const sns = new SNS({ region: 'eu-north-1' })
 
-const putItemDoDatabase = async rawData => {
+const putItemToDatabase = async rawData => {
 
   const { count, ...productData } = await productSchema.validate(JSON.parse(rawData))
 
@@ -27,10 +27,7 @@ export const handler = async event => {
   try {
     const sqsData = event.Records.map(({ body }) => body)
 
-    await Promise.all(sqsData.map(putItemDoDatabase))
-
-    console.log('sqsdata', sqsData)
-    console.log('topicarn', process.env.SNS_ARN)
+    await Promise.all(sqsData.map(putItemToDatabase))
 
     const snsResult = await sns.publish({
       Subject: 'new items added',
@@ -38,9 +35,7 @@ export const handler = async event => {
       TopicArn: process.env.SNS_ARN
     }).promise()
 
-    console.log('snsresult:  ', snsResult)
-
-    return response(200, { message: 'items added', newProduct })
+    return response(200, { message: 'items added', newProduct, snsResult })
 
   } catch (err) {
     if (err.name == 'ValidationError')
