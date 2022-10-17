@@ -16,10 +16,7 @@ provider:
       Action:
         - 'sns:*'
       Resource: '*'
-    - Effect: Allow
-      Action:
-        - 'sqs:*'
-      Resource: '*'
+
   environment:
     SNS_ARN:
       Ref: SNSTopic

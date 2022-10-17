@@ -29,11 +29,17 @@ export const handler = async event => {
 
     await Promise.all(sqsData.map(putItemDoDatabase))
 
-    sns.publish({
+    console.log('sqsdata', sqsData)
+    console.log('topicarn', process.env.SNS_ARN)
+
+    const snsResult = await sns.publish({
       Subject: 'new items added',
       Message: 'look at the products: ',
       TopicArn: process.env.SNS_ARN
-    })
+    }).promise()
+
+    console.log('snsresult:  ', snsResult)
+
     return response(200, { message: 'items added', newProduct })
 
   } catch (err) {
