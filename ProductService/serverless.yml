@@ -52,7 +52,7 @@ resources:
         TopicArn:
           Ref: SNSTopic
         FilterPolicy:
-          price: [{"numeric": [">=", 200]}]
+          price: [{"numeric": [">", 1000]}]
     SNSSubscription2:
       Type: AWS::SNS::Subscription
       Properties:
@@ -61,7 +61,7 @@ resources:
         TopicArn:
           Ref: SNSTopic
         FilterPolicy: 
-          price: [{"numeric": ["<=", 2000]}]
+          price: [{"numeric": ["<=", 1000]}]
     products:
       Type: AWS::DynamoDB::Table
       Properties:
