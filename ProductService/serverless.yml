@@ -51,6 +51,17 @@ resources:
         Protocol: email
         TopicArn:
           Ref: SNSTopic
+        FilterPolicy:
+          price: [{"numeric": [">=", 200]}]
+    SNSSubscription2:
+      Type: AWS::SNS::Subscription
+      Properties:
+        Endpoint: user010607@gmail.com
+        Protocol: email
+        TopicArn:
+          Ref: SNSTopic
+        FilterPolicy: 
+          price: [{"numeric": ["<=", 2000]}]
     products:
       Type: AWS::DynamoDB::Table
       Properties:

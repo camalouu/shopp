@@ -21,21 +21,29 @@ const putItemToDatabase = async rawData => {
     TableName: 'stocks',
     Item: { count, product_id: newProduct.id }
   }).promise()
+
+  const snsResult = await sns.publish({
+    Subject: 'New product uploaded',
+    Message: `Product: ${newProduct} `,
+    TopicArn: process.env.SNS_ARN,
+    MessageAttributes: {
+      price: {
+        DataType: "Number",
+        StringValue: `${newProduct.price}`
+      }
+    }
+  }).promise()
+
+  return snsResult
 }
 
 export const handler = async event => {
   try {
     const sqsData = event.Records.map(({ body }) => body)
 
-    await Promise.all(sqsData.map(putItemToDatabase))
+    const snsResults = await Promise.all(sqsData.map(putItemToDatabase))
 
-    const snsResult = await sns.publish({
-      Subject: 'new items added',
-      Message: 'look at the products: ',
-      TopicArn: process.env.SNS_ARN
-    }).promise()
-
-    return response(200, { message: 'items added', newProduct, snsResult })
+    return response(200, { message: 'items added', snsResults })
 
   } catch (err) {
     if (err.name == 'ValidationError')
