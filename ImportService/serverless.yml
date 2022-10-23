@@ -11,6 +11,11 @@ provider:
         - 's3:*'
       Resource:
         - 'arn:aws:s3:::import-service-bucket-zafar/*'
+    - Effect: Allow
+      Action: 
+        - 'sqs:*'
+      Resource:
+        - 'arn:aws:sqs:eu-north-1:301382425986:catalogItemsQueue'
 
 plugins:
   - serverless-esbuild
