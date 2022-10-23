@@ -24,7 +24,7 @@ const putItemToDatabase = async rawData => {
 
   const snsResult = await sns.publish({
     Subject: 'New product uploaded',
-    Message: `Product: ${newProduct} `,
+    Message: `Product: ${JSON.stringify(newProduct)} `,
     TopicArn: process.env.SNS_ARN,
     MessageAttributes: {
       price: {
