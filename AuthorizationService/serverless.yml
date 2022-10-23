@@ -1,0 +1,14 @@
+service: authorization-service
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  region: eu-north-1
+  stage: dev
+
+plugins:
+  - serverless-dotenv-plugin
+
+functions:
+  basicAuthorizer:
+    handler: handler.basicAuthorizer
