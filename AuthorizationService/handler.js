@@ -1,16 +1,5 @@
 const { Buffer } = require('node:buffer');
 
-const response = (statusCode, payload) => {
-  return {
-    headers: {
-      'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json'
-    },
-    statusCode,
-    body: JSON.stringify(payload)
-  }
-}
-
 const generatePolicy = (principalId, resource, effect = "Allow") => {
   return {
     principalId,
@@ -27,13 +16,12 @@ const generatePolicy = (principalId, resource, effect = "Allow") => {
   }
 }
 
-
 module.exports.basicAuthorizer = async event => {
 
   console.log("Event: ", JSON.stringify(event))
 
   if (event["type"] != "TOKEN")
-    return response(401, { error: "Unauthorized" })
+    return "Unauthorized"
 
   try {
 
@@ -47,20 +35,14 @@ module.exports.basicAuthorizer = async event => {
 
     console.log(`username: ${username} and password: ${password}`);
 
-    const storedUserPassword = process.env[username];
+    const storedUserPassword = process.env[username]
 
-    if (!storedUserPassword || storedUserPassword != password)
-      throw new Error("invalid authorization token")
+    const effect =
+      (storedUserPassword && storedUserPassword == password) ? "Allow" : "Deny"
 
-    const policy = generatePolicy(encodedCreds, event.methodArn);
-
-    return response(200, policy)
+    return generatePolicy(encodedCreds, event.methodArn, effect);
 
   } catch (error) {
-    return response(403, {
-      error: {
-        "Unauthorized": error.message
-      }
-    })
+    return `Unauthorized: ${error.message}`
   }
 }
