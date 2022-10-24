@@ -4,7 +4,10 @@ const response = (statusCode, payload) => {
     statusCode,
     headers: {
       'Access-Control-Allow-Origin': '*',
-      'Content-Type': 'application/json',
+      'Access-Control-Allow-Headers': '*',
+      'Access-Control-Allow-Methods': '*',
+      'Access-Control-Allow-Credentials': true,
+      'Content-Type': 'application/json'
     },
     body: payload
   }
