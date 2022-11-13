@@ -56,7 +56,7 @@ resources:
     SNSSubscription2:
       Type: AWS::SNS::Subscription
       Properties:
-        Endpoint: user010607@gmail.com
+        Endpoint: camolovzafar@gmail.com
         Protocol: email
         TopicArn:
           Ref: SNSTopic
